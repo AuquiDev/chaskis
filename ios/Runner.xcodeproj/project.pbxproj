@@ -161,7 +161,6 @@
 				F3FE2C938A751600D124B528 /* Pods-RunnerTests.release.xcconfig */,
 				1AD10E9F82A765D3FB0EBCDC /* Pods-RunnerTests.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -476,7 +475,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.chaskis;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.chaskises;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

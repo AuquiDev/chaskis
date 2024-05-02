@@ -62,7 +62,6 @@ class TDetalleTrabajoModel {
         "collectionName": collectionName,
         "created": created,
         "updated": updated,
-
         "codigo_grupo": codigoGrupo,
         "id_restriccionAlimentos": idRestriccionAlimentos,
         "id_cantidad_paxguia": idCantidadPaxguia,

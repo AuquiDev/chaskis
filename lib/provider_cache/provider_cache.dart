@@ -9,50 +9,38 @@ import 'package:chaskis/shared%20preferences/shared_global.dart';
 class UsuarioProvider extends ChangeNotifier {
   TEmpleadoModel? _usuarioEncontrado;
   // Crear una instancia de SharedPrefencesGlobal
- SharedPrefencesGlobal sharedPrefs = SharedPrefencesGlobal();
+  SharedPrefencesGlobal sharedPrefs = SharedPrefencesGlobal();
 
- Future<void> cargarUsuario() async {
-  // final idRolesSueldoEmpleados = await sharedPrefs.getIdRolesSueldoEmpleados();
-  final id = await sharedPrefs.getID();
-  final nombre = await sharedPrefs.getNombre();
-  // final apellidoPaterno = await sharedPrefs.getApellidoPaterno();
-  // final apellidoMaterno = await sharedPrefs.getApellidoMaterno();
-  // final correo = await sharedPrefs.getCorreo();
-  final rol = await sharedPrefs.getRol();
-  final image = await sharedPrefs.getImage();
-  final collectionId = await sharedPrefs.getCollectionID();
+//USUARIO LOGIN
 
-   _usuarioEncontrado = TEmpleadoModel(
-    id: id,
-    estado: true, 
-    // idRolesSueldoEmpleados: '' ,//idRolesSueldoEmpleados.toString(), 
-    nombre: nombre.toString(),
-    apellidoPaterno: '',//apellidoPaterno.toString(), 
-    apellidoMaterno: '', //apellidoMaterno.toString(), 
-    sexo: '', 
-    // direccionResidencia: '', 
-    // lugarNacimiento: '', 
-    // correoElectronico: '',//correo.toString(), 
-    // nivelEscolaridad: '', 
-    // estadoCivil: '', 
-    // modalidadLaboral: '', 
-    cedula: 0, 
-    // cuentaBancaria: '', 
-    telefono: '', 
-    contrasena: '', 
-    imagen: image,
-    collectionId: collectionId,
-    rol: rol.toString());
-    
-    
+  Future<void> cargarUsuario() async {
+    final id = await sharedPrefs.getID();
+    final nombre = await sharedPrefs.getNombre();
+    final rol = await sharedPrefs.getRol();
+    final image = await sharedPrefs.getImage();
+    final collectionId = await sharedPrefs.getCollectionID();
+
+    _usuarioEncontrado = TEmpleadoModel(
+        id: id,
+        estado: true,
+        nombre: nombre.toString(),
+        apellidoPaterno: '',
+        apellidoMaterno: '',
+        sexo: '',
+        cedula: 0,
+        telefono: '',
+        contrasena: '',
+        imagen: image,
+        collectionId: collectionId,
+        rol: rol.toString());
+
     notifyListeners();
- }
- 
+  }
 
   // Obtener el usuario encontrado
   TEmpleadoModel? get usuarioEncontrado => _usuarioEncontrado;
 
-  void setusuarioLogin (TEmpleadoModel usuario) async {
+  void setusuarioLogin(TEmpleadoModel usuario) async {
     _usuarioEncontrado = usuario;
     cargarUsuario();
     notifyListeners();
@@ -64,7 +52,6 @@ class UsuarioProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   //TOTAL SUMA ACUMULADO TOTAL DE UNA LISTA PDF: reporte la suma total de una lista pdf.
   double _total = 0;
 
@@ -74,26 +61,44 @@ class UsuarioProvider extends ChangeNotifier {
     _total = value;
     notifyListeners();
     // Configura un temporizador para restablecer _total a 0 después de 3 segundos
-      Timer(const Duration(seconds: 5), () {
-        _total = 0;
-        notifyListeners();
-      });
-
+    Timer(const Duration(seconds: 5), () {
+      _total = 0;
+      notifyListeners();
+    });
   }
-  //OFFLINE 
-   //Activar el Modo Offline de Aplicativo: En esta seccion utilziaremos nuestro provider del servidor y provider de sqllite. 
+
+  //OFFLINE
+  //Activar el Modo Offline de Aplicativo: En esta seccion utilziaremos nuestro provider del servidor y provider de sqllite.
   //haremos un condiconal en base al modo offline, si es false, usa del servidor y si es true usa el locla SQLlite
   bool _isOffline = false;
 
-  bool get isOffline => _isOffline;
+  bool get isOffline {
+    // Obtener el futuro de SharedPreferences
+    final isOfflineFuture = sharedPrefs.getIsOffline();
 
-  void setIsOffline(bool value) {
-    _isOffline = value;
+    // Esperar a que el futuro se complete y obtener el valor booleano
+    isOfflineFuture.then((value) {
+      // Asignar el valor del futuro a _isOffline si es diferente de null,
+      // de lo contrario, mantener el valor existente de _isOffline
+      if (value != null) {
+        _isOffline = value;
+      }
+    });
+
+    // Devolver el valor actual de _isOffline
+    return _isOffline;
+  }
+
+
+  Future<void> saveIsOffline(bool value) async {
+    _isOffline = value; // Asignar el valor recibido como parámetro
+    await sharedPrefs.saveIsOffline(
+        value); // Guardar el valor en las preferencias compartidas
     print(_isOffline);
     notifyListeners();
   }
 
-  //MENSAJE DE CONEXION A INTERNET 
+  //MENSAJE DE CONEXION A INTERNET
   String _message = '';
 
   String get message => _message;
@@ -104,7 +109,7 @@ class UsuarioProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //DATA PARA SINCRONZIAR : SI existes datos para sincronizar  
+  //DATA PARA SINCRONZIAR : SI existes datos para sincronizar
   bool _sincData = false;
 
   bool get sincData => _sincData;
@@ -115,8 +120,9 @@ class UsuarioProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //Activar Boton o desactivar boton segun haya internet. 
-   bool _isConnected = false; // false indica sin conexión, true indica con conexión
+  //Activar Boton o desactivar boton segun haya internet.
+  bool _isConnected =
+      false; // false indica sin conexión, true indica con conexión
 
   bool get isConnected => _isConnected;
 
@@ -125,5 +131,4 @@ class UsuarioProvider extends ChangeNotifier {
     print('ISConetced $_isConnected');
     notifyListeners();
   }
-
 }

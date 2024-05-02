@@ -10,7 +10,6 @@ import 'package:chaskis/pages/t_asistencia_details.dart';
 import 'package:chaskis/pages/t_pdf_export_asistencias.dart';
 import 'package:chaskis/provider_cache/provider_cache.dart';
 import 'package:chaskis/provider/provider_t_detalle_trabajo.dart';
-import 'package:chaskis/qr_page.dart';
 import 'package:chaskis/utils/custom_text.dart';
 import 'package:chaskis/utils/decoration_form.dart';
 import 'package:chaskis/utils/format_fecha.dart';
@@ -190,11 +189,11 @@ class _ListAsistenciaState extends State<ListAsistencia> {
                                             outerAnimation: Curves.elasticInOut,
                                             child: GestureDetector(
                                                 onTap: () async {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              const QrPageAsistencia()));
+                                                  // Navigator.push(
+                                                  //     context,
+                                                  //     MaterialPageRoute(
+                                                  //         builder: (_) =>
+                                                  //             const QrPageAsistencia()));
                                                 },
                                                 child: const Center(
                                                   child: H2Text(

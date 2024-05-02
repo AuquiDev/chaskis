@@ -50,73 +50,19 @@ class DatabaseTablesDB {
         created TEXT,
         updated TEXT,
         estado INTEGER,
-        id_rolesSueldo_Empleados TEXT,
+        
         nombre TEXT,
         apellido_paterno TEXT,
         apellido_materno TEXT,
         sexo TEXT,
-        direccion_residencia TEXT,
-        lugar_nacimiento TEXT,
-        fecha_nacimiento TEXT,
-        correo_electronico TEXT,
-        nivel_escolaridad TEXT,
-        estado_civil TEXT,
-        modalidad_laboral TEXT,
+       
         cedula INTEGER,
-        cuenta_bancaria TEXT,
+        
         imagen TEXT,
-        cv_document TEXT,
         telefono TEXT,
         contrasena TEXT,
         rol TEXT
       );
-      ''',
-      '''
-      CREATE TABLE treportepasajeros (
-        idsql INTEGER PRIMARY KEY AUTOINCREMENT,
-        id TEXT,
-        collectionId TEXT,
-        collectionName TEXT,
-        created TEXT,
-        updated TEXT,
-        idTrabajo TEXT,
-        nombre_pasajero TEXT,
-        gmail TEXT,
-        idioma INTEGER,
-        pregunta1 TEXT,
-        pregunta2 TEXT,
-        pregunta3 TEXT,
-        pregunta4 TEXT,
-        pregunta5 TEXT,
-        pregunta6 TEXT,
-        pregunta7 TEXT,
-        pregunta8 TEXT,
-        pregunta9 TEXT,
-        pregunta10 TEXT,
-        pregunta11 TEXT,
-        pregunta12 TEXT,
-        pregunta13 TEXT,
-        idEmpleados TEXT
-      );
-      ''',
-      '''
-      CREATE TABLE treporteincidencias (
-        idsql INTEGER PRIMARY KEY AUTOINCREMENT,
-        id TEXT,
-        collectionId TEXT,
-        collectionName TEXT,
-        created TEXT,
-        updated TEXT,
-        idTrabajo TEXT,
-        idEmpleados TEXT,
-        pregunta1 TEXT,
-        pregunta2 TEXT,
-        pregunta3 TEXT,
-        pregunta4 TEXT,
-        pregunta5 TEXT,
-        pregunta6 TEXT,
-        pregunta7 TEXT
-    );
       ''',
       '''
       CREATE TABLE tpersonal (
@@ -130,7 +76,63 @@ class DatabaseTablesDB {
         rol TEXT,
         image TEXT
       );
+    ''','''
+      CREATE TABLE trunners (
+        idsql INTEGER PRIMARY KEY AUTOINCREMENT,
+        id TEXT,
+        collectionId TEXT,
+        collectionName TEXT,
+        created TEXT,
+        updated TEXT,
+        id_evento TEXT,
+        id_distancia TEXT,
+        nombre TEXT,
+        apellidos TEXT,
+        dorsal TEXT,
+        pais TEXT,
+        telefono TEXT,
+        estado INTEGER,
+        genero TEXT,
+        numeroDeDocumentos INTEGER,
+        tallaDePolo TEXT
+      );
+    ''', 
+     '''
+      CREATE TABLE check_points00 (
+        idsql INTEGER PRIMARY KEY AUTOINCREMENT,
+        id TEXT,
+        collectionId TEXT,
+        collectionName TEXT,
+        created TEXT,
+        updated TEXT,
+        id_corredor TEXT,
+        id_check_points TEXT,
+        fecha TEXT,
+        estado INTEGER,
+        nombre TEXT,
+        dorsal TEXT
+      );
+    ''', 
     '''
+      CREATE TABLE tlistcheckpointsar (
+        idsql INTEGER PRIMARY KEY AUTOINCREMENT,
+        id TEXT,
+        collectionId TEXT,
+        collectionName TEXT,
+        created TEXT,
+        updated TEXT,
+        id_evento TEXT,
+        ubicacion TEXT,
+        nombre TEXT,
+        descripcion TEXT,
+        elevacion TEXT,
+        orden INTEGER,
+        hora_apertura TEXT,
+        hora_cierre TEXT,
+        estatus INTEGER,
+        items_list TEXT
+      );
+      '''
     ];
 
     for (String query in queries) {

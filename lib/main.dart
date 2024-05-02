@@ -1,15 +1,19 @@
+import 'package:chaskis/provider/provider_sql_check_p0.dart';
+import 'package:chaskis/provider/provider_sql_list_check_points_ar.dart';
+import 'package:chaskis/provider/provider_sql_runners_ar.dart';
+import 'package:chaskis/provider/provider_t_check_p0.dart';
+import 'package:chaskis/provider/provider_t_list_check_ar.dart';
+import 'package:chaskis/provider/provider_t_runners_ar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:chaskis/provider_cache/current_page.dart';
 import 'package:chaskis/provider/provider_sql_detalle_grupo.dart';
 import 'package:chaskis/provider/provider_sql_empelado.dart';
-import 'package:chaskis/provider/provider_sql_personal.dart';
 import 'package:chaskis/provider/provider_sql_tasitencia.dart';
 import 'package:chaskis/provider_cache/provider_cache.dart';
 import 'package:chaskis/provider/provider_t_asistencia.dart';
 import 'package:chaskis/provider/provider_t_detalle_trabajo.dart';
 import 'package:chaskis/provider/provider_t_empleado.dart';
-import 'package:chaskis/provider/provider_t_personal.dart';
 import 'package:chaskis/zplashScreen/welcome_page.dart';
 import 'package:chaskis/shared%20preferences/shared_global.dart';
 import 'package:provider/provider.dart';
@@ -73,14 +77,37 @@ class AppState extends StatelessWidget {
           create: (context) => DBEMpleadoProvider(),
           lazy: false,
         ),
-        //PERSONAL
+        //LISTCHECK POTINS
         ChangeNotifierProvider(
-          create: (context) => TPersonalProvider(),
+          create: (context) => TListCheckPoitns_ARProvider(),
           lazy: false,
         ),
-        //OFFLINE PERSONAL
+        //OFFLINE LISTCHECK POINTS
         ChangeNotifierProvider(
-          create: (context) => DBPersonalProvider(),
+          create: (context) => DBTListCheckPoitns_ARProvider(),
+          lazy: false,
+        ),
+
+        //OFFLINE DBRUNNERS APP
+        ChangeNotifierProvider(
+          create: (context) => DBRunnersAppProvider(),
+          lazy: false,
+        ),
+
+        //RUNNERS 
+        ChangeNotifierProvider(
+          create: (context) => TRunnersProvider(),
+          lazy: false,
+        ),
+        
+         //CHECK POINTS 00 
+        ChangeNotifierProvider(
+          create: (context) => TCheckP00Provider(),
+          lazy: false,
+        ),
+         //SQL CHECK POINTS 00 
+        ChangeNotifierProvider(
+          create: (context) => DBCheckP00AppProvider(),
           lazy: false,
         ),
       ],

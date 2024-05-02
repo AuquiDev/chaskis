@@ -5,8 +5,8 @@ import 'package:chaskis/provider_cache/provider_cache.dart';
 import 'package:chaskis/utils/custom_text.dart';
 import 'package:provider/provider.dart';
 
-class OfflineSIgnalButon extends StatelessWidget {
-  const OfflineSIgnalButon({
+class OfflineSIgnalButonSmall extends StatelessWidget {
+  const OfflineSIgnalButonSmall({
     super.key,
   });
 
@@ -14,28 +14,26 @@ class OfflineSIgnalButon extends StatelessWidget {
   Widget build(BuildContext context) {
     final dataProvider = Provider.of<UsuarioProvider>(context);
     bool isoffline = dataProvider.isOffline;
-    return Column(
+    return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          decoration: const BoxDecoration(color: Colors.transparent, shape: BoxShape.circle),
-          child: IconButton(
-              onPressed: null,
-              icon: isoffline ? const OnSignalOffline() : const SignalAPi()),
-        ),
          isoffline
-                ? const H2Text(
-                    text: 'offline',
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.red,
-                  )
-                : const H2Text(
-                    text: 'online',
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.green,
-                  ),
+            ? const H2Text(
+                text: 'offline',
+                fontSize: 10,
+                color: Colors.red,
+              )
+            : const H2Text(
+                text: 'online',
+                fontSize: 10,
+                color: Colors.green,
+              ),
+        Container(
+          padding: EdgeInsets.all(5),
+          child: 
+               isoffline ? const OnSignalOffline() : const SignalAPi(),
+        ),
+       
       ],
     );
   }
@@ -77,7 +75,7 @@ class _SignalAPiState extends State<SignalAPi> {
   Widget build(BuildContext context) {
     return Icon(
       _getSignalIcon(),
-      size: 40,
+      size: 15,
       color: Colors.green,
     );
   }
@@ -110,7 +108,7 @@ class _OnSignalOfflineState extends State<OnSignalOffline> {
     super.initState();
     _startSignalAnimation();
   }
- 
+
   void _startSignalAnimation() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
@@ -130,7 +128,7 @@ class _OnSignalOfflineState extends State<OnSignalOffline> {
   Widget build(BuildContext context) {
     return Icon(
       _getSignalIcon(),
-      size: 40,
+      size: 15,
       color: Colors.redAccent,
     );
   }

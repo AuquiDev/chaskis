@@ -60,22 +60,6 @@ class SharedPrefencesGlobal {
   }
 
   
-  //  // Función para obtener el campo id_rolesSueldo_Empleados desde shared preferences
-  // Future<String?> getIdRolesSueldoEmpleados() async {
-  //   return _pref.getString('idRolesSueldoEmpleados');
-  // }
-
-  //  // Función para guardar el campo id_rolesSueldo_Empleados en shared preferences
-  // Future<void> saveIdRolesSueldoEmpleados(String  idRolesSueldoEmpleados) async {
-  //   await _pref.setString('idRolesSueldoEmpleados', idRolesSueldoEmpleados);
-  //   print('Campo idRolesSueldoEmpleados guardado $idRolesSueldoEmpleados');
-  // }
-
-  // // Función para mostrar todos los campos del usuario
-  // Future<void> showAllUserData() async {
-  //   print('idRolesSueldoEmpleados: ${await getIdRolesSueldoEmpleados()}');
-  //   // Agrega las líneas correspondientes para los demás campos
-  // }
   //NOMBRE 
   Future<String?> getNombre() async {
     return _pref.getString('nombrekey');
@@ -126,7 +110,17 @@ class SharedPrefencesGlobal {
     await _pref.setString('idEvento', text);
     print('Campo IdEvento guardado $text');
   }
+//ISOFFLINE ESTAUS APP
+//COLLECTION ID  
+ // Método para obtener el estado de modo offline desde SharedPreferences
+Future<bool?> getIsOffline() async {
+  return _pref.getBool('isOffline');
+}
 
+// Método para guardar el estado de modo offline en SharedPreferences
+Future<void> saveIsOffline(bool isOffline) async {
+  await _pref.setBool('isOffline', isOffline);
+}
 }
 
 

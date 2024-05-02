@@ -3,6 +3,9 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chaskis/provider/provider_sql_check_p0.dart';
+import 'package:chaskis/provider/provider_sql_empelado.dart';
+import 'package:chaskis/provider/provider_sql_runners_ar.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
@@ -17,7 +20,6 @@ import 'package:chaskis/pages/orientation_web_page.dart';
 import 'package:chaskis/provider_cache/provider_cache.dart';
 import 'package:chaskis/provider/provider_t_empleado.dart';
 import 'package:chaskis/utils/custom_text.dart';
-import 'package:chaskis/utils/decoration_form.dart';
 import 'package:chaskis/shared%20preferences/shared_global.dart';
 import 'package:chaskis/widgets/demo_conectivity_plus.dart';
 import 'package:chaskis/widgets/offline_buton.dart';
@@ -44,6 +46,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+     Provider.of<DBRunnersAppProvider>(context, listen: false).initDatabase();
+              Provider.of<DBCheckP00AppProvider>(context, listen:  false).initDatabase();
+              Provider.of<DBEMpleadoProvider>(context, listen:  false).initDatabase();
     cargarUsuario();
     // Al inicializar el widget, obtenemos el estado de inicio de sesión previo
     SharedPrefencesGlobal().getLoggedIn().then((value) {
@@ -103,180 +108,100 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-             
               DelayedDisplay(
                 delay: const Duration(milliseconds: 5000),
                 child: Center(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.only(top: 220, bottom: 120),
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                        child: Container(
-                          constraints: const BoxConstraints(maxWidth: 350),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 40),
-                          color: Colors.black12,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                               LoginBar(user: user),
-                              // TextFormField(
-                              //   controller: _cedulaController,
-                              //   keyboardType: TextInputType.number,
-                              //   maxLength: 8,
-                              //   inputFormatters: [
-                              //     //Expresion Regular
-                              //     FilteringTextInputFormatter.allow(
-                              //         RegExp('[0-9]'))
-                              //   ],
-                              //   decoration: decorationTextField(
-                              //       hintText: 'campo obligatorio',
-                              //       labelText: 'DNI ',
-                              //       prefixIcon: const Icon(Icons.person,
-                              //           color: Colors.black45)),
-                              //   validator: (value) {
-                              //     if (value != null && value.isEmpty) {
-                              //       return 'Campo obligatorio';
-                              //     }
-                              //     if (value!.length < 8) {
-                              //       return 'Ingrese 8 digitos';
-                              //     }
-                              //     return null;
-                              //   },
-                              // ),
-                              // TextFormField(
-                              //   controller: _passwordController,
-                              //   obscureText: isVisible,
-                              //   keyboardType: TextInputType.visiblePassword,
-                              //   inputFormatters: [
-                              //     FilteringTextInputFormatter.deny(
-                              //         RegExp(r'\s')), // Denegar espacios
-                              //   ],
-                              //   decoration: decorationTextField(
-                              //       hintText: 'campo obligatorio',
-                              //       labelText: 'contraseña',
-                              //       prefixIcon: IconButton(
-                              //           onPressed: () {
-                              //             isVisible = !isVisible;
-                              //             setState(() {});
-                              //           },
-                              //           icon: Icon(
-                              //             isVisible != true
-                              //                 ? Icons.visibility
-                              //                 : Icons.visibility_off,
-                              //             size: 18,
-                              //           ))),
-                              //   validator: (value) {
-                              //     if (value != null && value.isEmpty) {
-                              //       return 'Campo obligatorio';
-                              //     }
-                              //     if (value!.length < 6) {
-                              //       return 'Ingrese más de 6 caracteres';
-                              //     }
-                              //     if (value.contains(' ')) {
-                              //       return 'La contraseña no puede contener espacios';
-                              //     }
-                              //     return null;
-                              //   },
-                              // ),
-                              GestureDetector(
-                                  onTap: () {
-                                    if (Theme.of(context).platform ==
-                                        TargetPlatform.android) {
-                                      // Mostrar AlertDialog en Android
-                                      showAndroidDialog(context);
-                                    } else if (Theme.of(context).platform ==
-                                        TargetPlatform.iOS) {
-                                      // Mostrar CupertinoDialog en iOS
-                                      showiOSDialog(context);
-                                    }
-                                  },
-                                  child: const OfflineSIgnalButon()),
-                              // Container(
-                              //   margin:
-                              //       const EdgeInsets.symmetric(vertical: 30),
-                              //   child: ElevatedButton(
-                              //     style: ButtonStyle(
-                              //         backgroundColor: MaterialStatePropertyAll(
-                              //             Colors.black),
-                              //         shape: const MaterialStatePropertyAll(
-                              //             RoundedRectangleBorder(
-                              //           borderRadius: BorderRadius.all(
-                              //               Radius.circular(10)),
-                              //         ))),
-                              //     onPressed: loginProvider.islogin
-                              //         ? null
-                              //         : () async {
-                              //             initStarLogin();
-                              //             await Provider.of<UsuarioProvider>(
-                              //                     context,
-                              //                     listen: false)
-                              //                 .cargarUsuario();
-                              //           },
-                              //     child: SizedBox(
-                              //         height: 60,
-                              //         child: Center(
-                              //             child: loginProvider.islogin
-                              //                 ? const CircularProgressIndicator(
-                              //                     color: Colors.white,
-                              //                   )
-                              //                 : const H2Text(
-                              //                     text: 'Iniciar Sesión',
-                              //                     fontWeight: FontWeight.w600,
-                              //                     color: Colors.white,
-                              //                   ))),
-                              //   ),
-                              // ),
-                              user?.imagen == null
-                                  ? ConectivityDemo()
-                                  : SizedBox(),
-                              H2Text(text: generateMaskedText(text), fontSize: 30,color: Colors.white60,),
-                              NumericKeyboard(
-                                onKeyboardTap: (value) {
-                                  setState(() {
-                                    if (text.length + value.length <= 8) {
-                                      text = text + value;
-                                      _passwordController.text = text;
-                                      _cedulaController.text = text;
-                                      print('TEXTO: $text');
-                                      print(text.length);
-                                      print(value.length);
-                                    }
-                                  });
-                                },
-                                rightButtonFn: () {
-                                  setState(() {
-                                    if (text.isNotEmpty) {
-                                      text = text.substring(0, text.length - 1);
-                                      _passwordController.text = text;
-                                      _cedulaController.text = text;
-                                    }
-                                  });
-                                },
-                                leftButtonFn: loginProvider.islogin
-                                    ? null
-                                    : () async {
-                                        initStarLogin();
-                                        await Provider.of<UsuarioProvider>(
-                                                context,
-                                                listen: false)
-                                            .cargarUsuario();
-                                      },
-                                textColor: Colors.red,
-                                 rightIcon: Icon(
-                                  Icons.backspace,
-                                  color: Colors.red,
-                                ),
-                                leftIcon: Icon(
-                                  Icons.check,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ],
-                          ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Container(
+                        constraints:
+                            const BoxConstraints(maxWidth: 350, maxHeight: 600),
+                        color: Colors.black54,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            LoginBar(user: user),
+                            H2Text(
+                              text: generateMaskedText(text),
+                              fontSize: 35,
+                              color: Colors.white,
+                            ),
+                            user?.imagen == null
+                                ? ConectivityDemo()
+                                : SizedBox(),
+                            loginProvider.islogin
+                                ? Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 100,
+                                      ),
+                                      const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  )
+                                : NumericKeyboard(
+                                    onKeyboardTap: (value) {
+                                      setState(() {
+                                        if (text.length + value.length <= 8) {
+                                          text = text + value;
+                                          _passwordController.text = text;
+                                          _cedulaController.text = text;
+                                          print('TEXTO: $text');
+                                          print(text.length);
+                                          print(value.length);
+                                        }
+                                      });
+                                    },
+                                    rightButtonFn: () {
+                                      setState(() {
+                                        if (text.isNotEmpty) {
+                                          text = text.substring(
+                                              0, text.length - 1);
+                                          _passwordController.text = text;
+                                          _cedulaController.text = text;
+                                        }
+                                      });
+                                    },
+                                    leftButtonFn: loginProvider.islogin
+                                        ? null
+                                        : () async {
+                                            (_cedulaController.text.length < 8)
+                                                ? null
+                                                : initStarLogin();
+                                            await Provider.of<UsuarioProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .cargarUsuario();
+                                          },
+                                    textColor: Colors.red,
+                                    rightIcon: Icon(Icons.backspace,
+                                        color: Colors.red),
+                                    leftIcon: Icon(
+                                      Icons.check,
+                                      size: 32,
+                                      color: (_cedulaController.text.length < 8)
+                                          ? Colors.transparent
+                                          : Color(0xFFF01313),
+                                    ),
+                                  ),
+                            GestureDetector(
+                              onTap: () {
+                                if (Theme.of(context).platform ==
+                                    TargetPlatform.android) {
+                                  // Mostrar AlertDialog en Android
+                                  showAndroidDialog(context);
+                                } else if (Theme.of(context).platform ==
+                                    TargetPlatform.iOS) {
+                                  // Mostrar CupertinoDialog en iOS
+                                  showiOSDialog(context);
+                                }
+                              },
+                              child: const OfflineSIgnalButon(),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -289,20 +214,22 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-  String generateMaskedText(String text) {
-  final int maxLength = 8;
-  String maskedText = '';
 
-  for (int i = 0; i < maxLength; i++) {
-    if (i < text.length) {
-      maskedText += text[i];
-    } else {
-      maskedText += '•';
+  String generateMaskedText(String text) {
+    final int maxLength = 8;
+    String maskedText = '';
+
+    for (int i = 0; i < maxLength; i++) {
+      if (i < text.length) {
+        maskedText += text[i];
+      } else {
+        maskedText += '•';
+      }
     }
+
+    return maskedText;
   }
 
-  return maskedText;
-}
 // Función para mostrar un AlertDialog en Android
   void showAndroidDialog(BuildContext context) {
     showDialog(
@@ -378,16 +305,21 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         speackQr('usuario no encontrado');
         ElegantNotification.error(
-          width: 360,
+          width: 350,
           stackedOptions: StackedOptions(
             key: 'topRight',
-            type: StackedType.above,
-            itemOffset: Offset(0, 5),
+            type: StackedType.same,
+            itemOffset: Offset(0, 0),
           ),
           position: Alignment.topCenter,
           animation: AnimationType.fromTop,
-          title: Text('Error'),
-          description: Text('Usuario no encontrado'),
+          description: H2Text(
+            text: 'Usuario no encontrado',
+            color: Colors.white,
+            fontSize: 12,
+          ),
+          background: Color(0xFF9A9595),
+          height: 50,
           onDismiss: () {},
         ).show(context);
       }
@@ -429,27 +361,27 @@ class LoginBar extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(
-              height: 80,
+              height: 10,
             ),
             user?.imagen == null
                 ? Image.asset(
-                    'assets/img/logo_smallar.png',
-                    height: 100,
+                    'assets/img/candado.png',
+                    height: 110,
                   )
                 : RippleAnimation(
-                    duration: const Duration(seconds: 1),
+                    duration: const Duration(seconds: 2),
                     color: Colors.white10,
                     child: ImageLoginUser(
                       user: user,
-                      size: 100,
+                      size: 90,
                     ),
                   ),
             H2Text(
               text: user?.imagen == null
-                  ? 'Bienvenido'.toUpperCase()
-                  : 'Hola ${user!.nombre}!'.toUpperCase(),
+                  ? 'INGRESE SU DNI'.toUpperCase()
+                  : 'BIENVENIDO ${user!.nombre}!'.toUpperCase(),
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 12,
               color: Colors.white,
             )
           ],
@@ -472,7 +404,7 @@ class ImageLoginUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DelayedDisplay(
-      delay: const Duration(milliseconds: 500),
+      delay: const Duration(milliseconds: 300),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100),
         child: CachedNetworkImage(

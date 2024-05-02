@@ -25,11 +25,11 @@ class DBLocalStorage {
     // Directory directory = await getApplicationCacheDirectory();//asociada con la memoria cache
     Directory directory =
         await getApplicationDocumentsDirectory(); //asociada con la memoria Docuemnto
-    String path = join(directory.path, 'DBIncident8.db');
+    String path = join(directory.path, 'andesRace2.db');
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 3,
       onOpen: (db) {},
       onCreate: (Database db, int version) async {
         print('Database path: $path');

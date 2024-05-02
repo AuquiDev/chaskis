@@ -1,48 +1,48 @@
 // ignore_for_file: avoid_print
 
 
+import 'package:chaskis/models/model_check_points.dart';
+import 'package:chaskis/poketbase/t_check_p0.dart';
 import 'package:flutter/material.dart';
 import 'package:chaskis/api/path_key_api.dart';
-import 'package:chaskis/models/model_t_personal.dart';
-import 'package:chaskis/poketbase/t_personal.dart';
 import 'package:pocketbase/pocketbase.dart';
 
-class TPersonalProvider with ChangeNotifier {
-  List<TPersonalModel> listaPersonal = [];
+class TCheckP00Provider with ChangeNotifier {
+  List<TCheckPointsModel> listAsistencia = [];
 
-  TPersonalProvider() {
-    print('Asistencia Inicializado');
+  TCheckP00Provider() {
+    print('CheckAR00 Inicializado');
     getTAsistenciaApp();
     realtime();
   }
 
   //SET Y GET
-  List<TPersonalModel> get e => listaPersonal;
+  List<TCheckPointsModel> get e => listAsistencia;
 
-  void addAsistencia(TPersonalModel e) {
-    listaPersonal.add(e);
+  void addAsistencia(TCheckPointsModel e) {
+    listAsistencia.add(e);
     notifyListeners();
   }
 
-  void updateTAsistencia(TPersonalModel e) {
-    listaPersonal[listaPersonal.indexWhere((x) => x.id == e.id)] = e;
+  void updateTAsistencia(TCheckPointsModel e) {
+    listAsistencia[listAsistencia.indexWhere((x) => x.id == e.id)] = e;
     notifyListeners();
   }
 
-  void deleteTAsistencia(TPersonalModel e) {
-    listaPersonal.removeWhere((x) => x.id == e.id);
+  void deleteTAsistencia(TCheckPointsModel e) {
+    listAsistencia.removeWhere((x) => x.id == e.id);
     notifyListeners();
   }
 
   getTAsistenciaApp() async {
-    List<RecordModel> response = await TPersonal.getAsitenciaPk();
+    List<RecordModel> response = await TCheckPoitns_AR0.getAsitenciaPk();
     final date = response.map((e) {
       e.data['id'] = e.id;
       e.data['created'] = DateTime.parse(e.created);
       e.data['updated'] = DateTime.parse(e.updated);
       e.data["collectionId"] = e.collectionId;
       e.data["collectionName"] = e.collectionName;
-      TPersonalModel ubicaciones =  TPersonalModel.fromJson(e.data);
+      TCheckPointsModel ubicaciones =  TCheckPointsModel.fromJson(e.data);
       addAsistencia(ubicaciones);
     }).toList();
     // print(response);
@@ -52,32 +52,41 @@ class TPersonalProvider with ChangeNotifier {
 
   //METODOS POST
   bool isSyncing = false;
-  postTAsistenciaProvider( {String? id, String? nombre,String? rol}) async {
+  postTAsistenciaProvider( {String? id, String? idCorredor,String? idCheckPoints, DateTime? fecha,
+  bool? estado, String? nombre, String? dorsal }) async {
     isSyncing = true;
     notifyListeners();
-    TPersonalModel data = TPersonalModel(
+    TCheckPointsModel data = TCheckPointsModel(
         id: '',
+        idCorredor: idCorredor!,
+        idCheckPoints: idCheckPoints!,
+        fecha: fecha!,
+        estado: estado!,
         nombre: nombre!,
-        rol: rol!,
+        dorsal: dorsal!
         );
 
-    await TPersonal.postAsistenciaPk(data);
+    await TCheckPoitns_AR0.postAsistenciaPk(data);
 
     await Future.delayed(const Duration(seconds: 2));
     isSyncing = false;
     notifyListeners();
   }
 
-  updateTAsistenciaProvider(  {String? id, String? nombre,String? rol}) async {
+  updateTAsistenciaProvider( {String? id, String? idCorredor,String? idCheckPoints, DateTime? fecha,
+  bool? estado, String? nombre, String? dorsal  }) async {
     isSyncing = true;
     notifyListeners();
-    TPersonalModel data = TPersonalModel(
-        id: '',
+    TCheckPointsModel data = TCheckPointsModel(
+        id: id!,
+        idCorredor: idCorredor!,
+        idCheckPoints: idCheckPoints!,
+        fecha: fecha!,
+        estado: estado!,
         nombre: nombre!,
-        rol: rol!,
-        );
+        dorsal: dorsal!);
 
-    await TPersonal.putAsitneciaPk(id: id, data: data);
+    await TCheckPoitns_AR0.putAsitneciaPk(id: id, data: data);
 
     await Future.delayed(const Duration(seconds: 2));
     isSyncing = false;
@@ -85,25 +94,33 @@ class TPersonalProvider with ChangeNotifier {
   }
 
   deleteTAsistenciaApp(String id) async {
-    await TPersonal.deleteAsistentciaPk(id);
+    await TCheckPoitns_AR0.deleteAsistentciaPk(id);
     notifyListeners();
   }
   //METODO PARA POST O UPDATE
-  Future<void> saveProductosApp(TPersonalModel e) async {
+  Future<void> saveProductosApp(TCheckPointsModel e) async {
     isSyncing = true;
     notifyListeners();
     if (e.id!.isEmpty) {
       await postTAsistenciaProvider(
         id: '',
-         nombre: e.nombre,
-        rol: e.rol,
+        idCorredor: e.idCorredor,
+        idCheckPoints: e.idCheckPoints,
+        fecha: e.fecha,
+        estado: e.estado,
+        nombre: e.nombre,
+        dorsal: e.dorsal
       );
       print('POST ASISTENCIA API ${e.nombre} ${e.id}');
     } else {
       await updateTAsistenciaProvider(
         id: e.id,
-         nombre: e.nombre,
-        rol: e.rol,
+        idCorredor: e.idCorredor,
+        idCheckPoints: e.idCheckPoints,
+        fecha: e.fecha,
+        estado: e.estado,
+        nombre: e.nombre,
+        dorsal: e.dorsal
       );
       print('PUT ASISTENCIA API ${e.nombre} ${e.id}');
     }
@@ -112,8 +129,8 @@ class TPersonalProvider with ChangeNotifier {
   }
 
   Future<void> realtime() async {
-    await pb1.collection('personal_op').subscribe('*', (e) {
-      print('REALTIME Personal ${e.action}');
+    await pb.collection('ar_chp_0_partida').subscribe('*', (e) {
+      print('REALTIME CHECK0 ${e.action}');
 
       switch (e.action) {
         case 'create':
@@ -122,7 +139,7 @@ class TPersonalProvider with ChangeNotifier {
           e.record!.data['updated'] = DateTime.parse(e.record!.updated);
           e.record!.data["collectionId"] = e.record!.collectionId;
           e.record!.data["collectionName"] = e.record!.collectionName;
-          addAsistencia(TPersonalModel.fromJson(e.record!.data));
+          addAsistencia(TCheckPointsModel.fromJson(e.record!.data));
           break;
         case 'update':
           e.record!.data['id'] = e.record!.id;
@@ -130,7 +147,7 @@ class TPersonalProvider with ChangeNotifier {
           e.record!.data['updated'] = DateTime.parse(e.record!.updated);
           e.record!.data["collectionId"] = e.record!.collectionId;
           e.record!.data["collectionName"] = e.record!.collectionName;
-          updateTAsistencia(TPersonalModel.fromJson(e.record!.data));
+          updateTAsistencia(TCheckPointsModel.fromJson(e.record!.data));
           break;
         case 'delete':
           e.record!.data['id'] = e.record!.id;
@@ -138,7 +155,7 @@ class TPersonalProvider with ChangeNotifier {
           e.record!.data['updated'] = DateTime.parse(e.record!.updated);
           e.record!.data["collectionId"] = e.record!.collectionId;
           e.record!.data["collectionName"] = e.record!.collectionName;
-          deleteTAsistencia(TPersonalModel.fromJson(e.record!.data));
+          deleteTAsistencia(TCheckPointsModel.fromJson(e.record!.data));
           break;
         default:
       }

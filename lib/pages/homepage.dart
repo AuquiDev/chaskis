@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_adjacent_string_concatenation
 
+import 'package:chaskis/pages/t_asistencia_page.dart';
+import 'package:chaskis/provider_cache/current_page.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
 import 'package:chaskis/provider/provider_sql_detalle_grupo.dart';
 import 'package:chaskis/provider/provider_sql_empelado.dart';
-import 'package:chaskis/provider/provider_sql_personal.dart';
 import 'package:chaskis/provider/provider_sql_tasitencia.dart';
-import 'package:chaskis/widgets/card_verticall.dart';
 import 'package:chaskis/models/model_t_empleado.dart';
 import 'package:chaskis/pages/t_empleado_login.dart';
 import 'package:chaskis/provider_cache/provider_cache.dart';
@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     Provider.of<DBAsistenciaAppProvider>(context, listen: false).initDatabase();
     Provider.of<DBDetalleGrupoProvider>(context, listen: false).initDatabase();
     Provider.of<DBEMpleadoProvider>(context, listen: false).initDatabase();
-    Provider.of<DBPersonalProvider>(context, listen: false).initDatabase();
+    // Provider.of<DBPersonalProvider>(context, listen: false).initDatabase();
     sharedPrefs.setLoggedIn(); // Supongo que este método debe ser llamado aquí
   }
 
@@ -112,9 +112,15 @@ class _HomePageState extends State<HomePage> {
       bottomSheet: ListTile(
         title: H2Text(text: 'Hola'),
       ),
-      body: const [
+      body:  [
         //CARRUSEL CON INDICADOR: GESTION
-        CardVertical(),
+        ElevatedButton(
+          onPressed: () {
+            final layoutmodel =
+                Provider.of<LayoutModel>(context, listen: false);
+            layoutmodel.currentPage = FormularioAsistenciapage();
+          },
+          child:  H2Text(text: 'Asistencias'),),
         //DIAGRAMA INDICADOR DE SINCRONIZACION DE DATOS.
         DiagrmaIndicatorSinc(),
       ],

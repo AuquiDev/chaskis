@@ -246,7 +246,7 @@ void playSound() async {
     }
    
     // Simular una carga con un temporizador
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
    
     // Lógica de navegación o mensaje de error
     if (userindex != -1) {

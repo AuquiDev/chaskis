@@ -1,12 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:chaskis/models/model_runners_ar.dart';
+import 'package:chaskis/provider/provider_sql_runners_ar.dart';
+import 'package:chaskis/provider/provider_t_runners_ar.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:chaskis/models/model_t_personal.dart';
+// import 'package:chaskis/models/model_t_personal.dart';
 import 'package:chaskis/offline/pdf_incidentes.dart';
-import 'package:chaskis/provider/provider_sql_personal.dart';
-import 'package:chaskis/provider/provider_t_personal.dart';
+// import 'package:chaskis/provider/provider_sql_personal.dart';
+// import 'package:chaskis/provider/provider_t_personal.dart';
 import 'package:chaskis/utils/custom_text.dart';
 import 'package:chaskis/utils/format_fecha.dart';
 import 'package:chaskis/widgets/state_signal_icons.dart';
@@ -14,16 +17,16 @@ import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
-class DBPersonalPage extends StatefulWidget {
-  const DBPersonalPage({
+class DBRunnerspage extends StatefulWidget {
+  const DBRunnerspage({
     super.key,
   });
 
   @override
-  State<DBPersonalPage> createState() => _DBPersonalPageState();
+  State<DBRunnerspage> createState() => _DBRunnerspageState();
 }
 
-class _DBPersonalPageState extends State<DBPersonalPage> {
+class _DBRunnerspageState extends State<DBRunnerspage> {
   final ScrollController _scrollController = ScrollController();
   bool showAppBar = true;
 
@@ -45,7 +48,7 @@ class _DBPersonalPageState extends State<DBPersonalPage> {
   @override
   void initState() {
     _scrollController.addListener(_onScroll);
-    Provider.of<DBPersonalProvider>(context, listen: false).initDatabase();
+    Provider.of<DBRunnersAppProvider>(context, listen: false).initDatabase();
     super.initState();
   }
 
@@ -58,15 +61,15 @@ class _DBPersonalPageState extends State<DBPersonalPage> {
 
   @override
   Widget build(BuildContext context) {
-    final dbProducto = Provider.of<DBPersonalProvider>(context);
-    List<TPersonalModel> listaSQl = dbProducto.listsql
+    final dbProducto = Provider.of<DBRunnersAppProvider>(context);
+    List<TRunnersModel> listaSQl = dbProducto.listsql
       ..sort(
-        (a, b) => a.rol.compareTo(b.rol),
+        (a, b) => a.nombre.compareTo(b.nombre),
       );
     bool issaving = dbProducto.offlineSaving;
 
-    final dataProvider = Provider.of<TPersonalProvider>(context);
-    final listaDatos = dataProvider.listaPersonal;
+    final dataProvider = Provider.of<TRunnersProvider>(context);
+    final listaDatos = dataProvider.listAsistencia;
 
     return Scaffold(
       body: SafeArea(
@@ -127,8 +130,9 @@ class _DBPersonalPageState extends State<DBPersonalPage> {
                                 const SizedBox(width: 30),
                                 GestureDetector(
                                   onTap: () async {
-                                    await dbProducto
-                                        .cleartable(); //Limipar  Base de datos.;
+                                    await dbProducto.cleartable(true);
+
+                                        // .cleartable(); //Limipar  Base de datos.;
                                   },
                                   child: Column(
                                     children: [
@@ -221,7 +225,7 @@ class LengtRegistros extends StatelessWidget {
     required this.listaSQl,
   });
 
-  final List<TPersonalModel> listaSQl;
+  final List<TRunnersModel> listaSQl;
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +262,7 @@ class CardDetalleTrabajo extends StatelessWidget {
     required this.e,
   });
 
-  final TPersonalModel e;
+  final TRunnersModel e;
 
   @override
   Widget build(BuildContext context) {
@@ -277,7 +281,7 @@ class CardDetalleTrabajo extends StatelessWidget {
         fontWeight: FontWeight.w600,
       ),
       subtitle: H2Text(
-        text: 'ROL: ${e.rol}',
+        text: 'ROL: ${e.dorsal}',
         fontSize: 12,
         fontWeight: FontWeight.w600,
         color: Colors.brown,
@@ -299,7 +303,7 @@ class CardDetalleTrabajo extends StatelessWidget {
                   SizedBox(
                     width: 250,
                     child: H2Text(
-                      text: e.rol,
+                      text: e.dorsal,
                       fontSize: 15,
                       color: Colors.orange,
                     ),

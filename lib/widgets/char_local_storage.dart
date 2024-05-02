@@ -1,17 +1,15 @@
 
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:chaskis/models/model_t_asistencia.dart';
 import 'package:chaskis/models/model_t_detalle_trabajo.dart';
 import 'package:chaskis/models/model_t_empleado.dart';
-import 'package:chaskis/models/model_t_personal.dart';
-import 'package:chaskis/models/model_t_report_pasajero.dart';
-import 'package:chaskis/models/model_t_reporte_incidencias.dart';
 import 'package:chaskis/provider_cache/provider_cache.dart';
 
 import 'package:chaskis/provider/provider_sql_detalle_grupo.dart';
 import 'package:chaskis/provider/provider_sql_empelado.dart';
-import 'package:chaskis/provider/provider_sql_personal.dart';
 import 'package:chaskis/provider/provider_sql_tasitencia.dart';
 import 'package:chaskis/utils/custom_text.dart';
 import 'package:chaskis/widgets/get_ramdomcolor.dart';
@@ -34,7 +32,7 @@ class _DiagrmaIndicatorSincState extends State<DiagrmaIndicatorSinc> {
     Provider.of<DBAsistenciaAppProvider>(context, listen: false).initDatabase();
     Provider.of<DBDetalleGrupoProvider>(context, listen: false).initDatabase();
     Provider.of<DBEMpleadoProvider>(context, listen: false).initDatabase();
-    Provider.of<DBPersonalProvider>(context, listen: false).initDatabase();
+    // Provider.of<DBPersonalProvider>(context, listen: false).initDatabase();
     super.initState();
   }
 
@@ -97,7 +95,7 @@ class StorageLocalChar extends StatelessWidget {
     final detalleGrupoList =
         Provider.of<DBDetalleGrupoProvider>(context).listsql;
     final empleadoList = Provider.of<DBEMpleadoProvider>(context).listsql;
-    final personalList = Provider.of<DBPersonalProvider>(context).listsql;
+    // final personalList = Provider.of<DBPersonalProvider>(context).listsql;
     // final reporteIncidenciasList =
     //     Provider.of<DBReporteIncidenciasProvider>(context).listsql;
     // final reportePasajeroList =
@@ -108,7 +106,7 @@ class StorageLocalChar extends StatelessWidget {
       'Asistencias',
       'Grupos',
       'Usuarios',
-      'Personal',
+      // 'Personal',
       // 'Incidencias',
       // 'Encuesta Pax',
     ];
@@ -118,7 +116,7 @@ class StorageLocalChar extends StatelessWidget {
       asistenciaList.length,
       detalleGrupoList.length,
       empleadoList.length,
-      personalList.length,
+      // personalList.length,
       // reporteIncidenciasList.length,
       // reportePasajeroList.length,
     ];
@@ -189,14 +187,14 @@ class StoraIdnullChar extends StatelessWidget {
     final detalleGrupoList =
         Provider.of<DBDetalleGrupoProvider>(context).listsql;
     final empleadoList = Provider.of<DBEMpleadoProvider>(context).listsql;
-    final personalList = Provider.of<DBPersonalProvider>(context).listsql;
+    // final personalList = Provider.of<DBPersonalProvider>(context).listsql;
 
     // Asignar nombres a cada lista
     final List<String> listNames = [
       'Asistencias',
       'Grupos',
       'Usuarios',
-      'Personal',
+      // 'Personal',
       // 'Incidencias',
       // 'Encuesta Pax',
     ];
@@ -206,7 +204,7 @@ class StoraIdnullChar extends StatelessWidget {
       asistenciaID(asistenciaList),
       grupoID(detalleGrupoList),
       empleadoID(empleadoList),
-      personID(personalList),
+      // personID(personalList),
       // incidenciaID(reporteIncidenciasList),
       // reportePaxID(reportePasajeroList),
     ];
@@ -287,20 +285,20 @@ int asistenciaID(List<TAsistenciaModel> list) {
     return list.where((e) => e.id == '').length;
   }
 
-  // ASISTENCIA COUNT ID NULL
-  int personID(List<TPersonalModel> list) {
-    return list.where((e) => e.id == '').length;
-  }
+  // // ASISTENCIA COUNT ID NULL
+  // int personID(List<TPersonalModel> list) {
+  //   return list.where((e) => e.id == '').length;
+  // }
 
-  // ASISTENCIA COUNT ID NULL
-  int incidenciaID(List<TReporteIncidenciasModel> list) {
-    return list.where((e) => e.id == '').length;
-  }
+//   // ASISTENCIA COUNT ID NULL
+//   int incidenciaID(List<TReporteIncidenciasModel> list) {
+//     return list.where((e) => e.id == '').length;
+//   }
 
-// ASISTENCIA COUNT ID NULL
-  int reportePaxID(List<TReportPasajeroModel> list) {
-    return list.where((e) => e.id == '').length;
-  }
+// // ASISTENCIA COUNT ID NULL
+//   int reportePaxID(List<TReportPasajeroModel> list) {
+//     return list.where((e) => e.id == '').length;
+//   }
 
   // Función para generar datos para el gráfico
   // List<MapEntry<String, int>> generateChartData(List<String> listNames, List<int> dataList) {

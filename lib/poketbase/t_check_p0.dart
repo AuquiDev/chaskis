@@ -1,36 +1,37 @@
 
-import 'package:chaskis/models/model_t_asistencia.dart';
+// import 'package:chaskis/models/model_t_asistencia.dart';
 import 'package:chaskis/api/path_key_api.dart';
+import 'package:chaskis/models/model_check_points.dart';
 import 'package:pocketbase/pocketbase.dart';
 
-class TAsistencia {
+class TCheckPoitns_AR0 {
   static getAsitenciaPk() async {
-    final records = await pb1.collection('asistencia_empleados').getFullList(
+    final records = await pb.collection('ar_chp_0_partida').getFullList(
           sort: '-created',
         );
     // print(records);
     return records;
   }
 
-  static  postAsistenciaPk(TAsistenciaModel data) async {
+  static  postAsistenciaPk(TCheckPointsModel data) async {
     final record =
-        await pb1.collection('asistencia_empleados').create(body: data.toJson());
+        await pb.collection('ar_chp_0_partida').create(body: data.toJson());
 
     return record;
   }
 
-  static  putAsitneciaPk({String? id, TAsistenciaModel? data}) async {
+  static  putAsitneciaPk({String? id, TCheckPointsModel? data}) async {
     final record =
-        await pb1.collection('asistencia_empleados').update(id!, body: data!.toJson());
+        await pb.collection('ar_chp_0_partida').update(id!, body: data!.toJson());
     return record;
   }
 
   static Future  deleteAsistentciaPk(String id) async {
-    final record = await pb1.collection('asistencia_empleados').delete(id);
+    final record = await pb.collection('ar_chp_0_partida').delete(id);
     return record;
   }
 
   static Future<RealtimeService> realmTimePocket() async {
-    return pb1.realtime;
+    return pb.realtime;
   }
 }

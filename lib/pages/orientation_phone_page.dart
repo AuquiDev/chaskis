@@ -1,4 +1,5 @@
 import 'package:chaskis/utils/gradient_background.dart';
+import 'package:chaskis/widgets/state_signal_small.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:chaskis/provider_cache/current_page.dart';
@@ -44,9 +45,12 @@ class _PhonePageState extends State<PhonePage> {
           iconTheme: IconThemeData(color: Colors.redAccent),
           backgroundColor: Colors.transparent,
           title: const TextAppBar(),
+          actions: [
+            OfflineSIgnalButonSmall(),
+          ],
         ),
         body: layoutmodel.currentPage, //const ListaOpciones(),
-        endDrawer: const MenuPrincipal(),
+        drawer: const MenuPrincipal(),
       ),
     );
   }

@@ -21,18 +21,23 @@ class MenuPrincipal extends StatelessWidget {
         Provider.of<UsuarioProvider>(context).usuarioEncontrado;
     return Drawer(
         child: SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ImageLoginUser(
-            user: currentImage,
-            size: 150,
-          ),
-          const ButtonInicio(),
-          const ModoOfflineClick(),
-          const Expanded(child: ListaOpcionesphone()),
-          const CloseSesion(),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            
+            ImageLoginUser(
+              user: currentImage,
+              size: 50,
+            ),
+            const ButtonInicio(),
+            
+            const Expanded(child: ListaOpcionesphone()),
+            const ModoOfflineClick(),
+            const CloseSesion(),
+          ],
+        ),
       ),
     ));
   }

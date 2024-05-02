@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:chaskis/pages/t_empleado_login.dart';
 import 'package:chaskis/utils/gradient_background.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
 class SplahScreen extends StatefulWidget {
   const SplahScreen({Key? key}) : super(key: key);
@@ -78,15 +77,9 @@ class _SplahScreenState extends State<SplahScreen>
                     begin: Offset(0, 1),
                     end: Offset.zero,
                   ).animate(_controller),
-                  child: RippleAnimation(
-                    duration: const Duration(milliseconds: 3000),
-                    minRadius: 80,
-                    delay: const Duration(seconds: 2),
-                    color: Colors.black12.withOpacity(.12),
-                    child: Image.asset(
-                      'assets/img/logo_smallar.png',
-                      width: MediaQuery.of(context).size.width * .2,
-                    ),
+                  child: Image.asset(
+                    'assets/img/logo_smallar.png',
+                    width: MediaQuery.of(context).size.width * .2,
                   ),
                 ),
                 AnimatedOpacity(

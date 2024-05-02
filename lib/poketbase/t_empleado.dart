@@ -8,7 +8,7 @@ class TEmpleado {
     final records = await pb.collection('empleados_personal').getFullList(
           sort: '-created',
         );
-        print('EMPLEADOS  $records');
+        // print('EMPLEADOS  $records');
     return records;
   }
 

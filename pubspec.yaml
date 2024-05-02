@@ -61,6 +61,7 @@ dependencies:
   audioplayers: ^5.2.1 #reproducir tonpo al scanear QR
   elegant_notification: ^2.1.2
   numeric_keyboard: ^1.1.0
+  flutter_expanded_tile: ^0.3.7
 
 dev_dependencies:
   flutter_test:

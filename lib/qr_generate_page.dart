@@ -1,4 +1,6 @@
 
+// ignore_for_file: unused_local_variable, deprecated_member_use
+
 import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';

@@ -1,45 +1,57 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:chaskis/models/model_check_points.dart';
+import 'package:chaskis/models/model_runners_ar.dart';
+import 'package:chaskis/provider/provider_sql_check_p0.dart';
+import 'package:chaskis/provider/provider_t_check_p0.dart';
 import 'package:fade_out_particle/fade_out_particle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:chaskis/models/model_t_asistencia.dart';
-import 'package:chaskis/models/model_t_personal.dart';
 import 'package:chaskis/provider_cache/provider_cache.dart';
-import 'package:chaskis/provider/provider_sql_tasitencia.dart';
-import 'package:chaskis/provider/provider_t_asistencia.dart';
-import 'package:chaskis/utils/custom_text.dart';
 import 'package:provider/provider.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:vibration/vibration.dart';
 
-class QrScannerPersonal extends StatefulWidget {
-  const QrScannerPersonal({
+class QrScannerRunners extends StatefulWidget {
+  const QrScannerRunners({
     super.key,
     required this.personalList,
     required this.idTrabajo,
   });
-  
-  final List<TPersonalModel> personalList;
+
+  final List<TRunnersModel> personalList;
   final String idTrabajo;
   @override
-  State<QrScannerPersonal> createState() => _QrScannerPersonalState();
+  State<QrScannerRunners> createState() => _QrScannerRunnersState();
 }
 
-class _QrScannerPersonalState extends State<QrScannerPersonal> {
+class _QrScannerRunnersState extends State<QrScannerRunners> {
   FlutterTts flutterTts = FlutterTts();
-  TPersonalModel isPerson = TPersonalModel(id: '', nombre: '-', rol: '-');
+  TRunnersModel isPerson = TRunnersModel(
+    id: '',
+    idEvento: '-',
+    idDistancia: '-',
+    nombre: '-',
+    apellidos: '-',
+    dorsal: '-',
+    pais: '-',
+    telefono: '-',
+    estado: true,
+    genero: '-',
+    numeroDeDocumentos: 0,
+    tallaDePolo: '-',
+  );
 
   bool isParticle = false;
   void particleinsta() {
     setState(() {
       isParticle = true;
     });
+
     // Después de 2 segundos, establece isParticle en false
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         isParticle = false;
       });
@@ -47,17 +59,16 @@ class _QrScannerPersonalState extends State<QrScannerPersonal> {
   }
 
   //PERSONAL Asistencia Encontrado
-  TAsistenciaModel personScaner = TAsistenciaModel(
+  TCheckPointsModel personScaner = TCheckPointsModel(
     id: '',
     created: DateTime.now(),
     updated: DateTime.now(),
-    idEmpleados: '',
-    idTrabajo: '',
-    horaEntrada: DateTime.now(),
-    horaSalida: DateTime.now(),
-    nombrePersonal: '',
-    actividadRol: '',
-    detalles: '',
+    idCorredor: '',
+    idCheckPoints: '',
+    fecha: DateTime.now(),
+    estado: true,
+    nombre: '',
+    dorsal: '',
   );
 
   @override
@@ -69,28 +80,12 @@ class _QrScannerPersonalState extends State<QrScannerPersonal> {
       },
       child: FadeOutParticle(
         disappear: isParticle,
-        child: const Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.qr_code_scanner,
-              size: 200,
-              color: Color(0xFF0590A2),
-            ),
-            H2Text(
-              text: 'Registro de Asistencia',
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF0590A2),
-            ),
-            H2Text(
-              text: 'Presione aquí',
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF3C4343),
-            ),
-          ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.asset(
+            'assets/img/qr_imgs.png',
+            width: 220,
+          ),
         ),
       ),
     );
@@ -122,9 +117,21 @@ class _QrScannerPersonalState extends State<QrScannerPersonal> {
           barcodeScanRes.split('|'); //Conveirte el String en una lista
       String idpersonal = personalData[0]; //El primer Elemento de la lista
 
-      TPersonalModel person = widget.personalList.firstWhere(
+      TRunnersModel person = widget.personalList.firstWhere(
         (p) => p.id == idpersonal,
-        orElse: () => TPersonalModel(nombre: 'nombre', rol: 'rol'),
+        orElse: () => TRunnersModel(
+          idEvento: '-',
+          idDistancia: '-',
+          nombre: 'nombre',
+          apellidos: '-',
+          dorsal: 'dorsal',
+          pais: '-',
+          telefono: '-',
+          estado: true,
+          genero: '-',
+          numeroDeDocumentos: 0,
+          tallaDePolo: '-',
+        ),
       );
 
       setState(() {
@@ -133,44 +140,49 @@ class _QrScannerPersonalState extends State<QrScannerPersonal> {
 
       if (person.id != null) {
         playSound();
-
+      
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
-          title: 'Asistencia marcada',
+          title: 'Marcación Exitosa',
           text:
-              '¡Bienvenido, ${isPerson.nombre}! Tu asistencia ha sido registrada.\n${isPerson.rol}',
-          confirmBtnColor: const Color(0xFF18861C),
-          confirmBtnText: 'Aceptar',
-          cancelBtnText: '',
+              'DORSAL: ${isPerson.dorsal}.\nNOMBRE: ${isPerson.nombre + isPerson.apellidos}.',
+          confirmBtnColor: Colors.green,
+          confirmBtnText: 'OK',
+          width: 300,
+          onConfirmBtnTap: () {
+            _scanQRCode(); //SCANNER QR
+            particleinsta();
+            Navigator.pop(context);
+          },
         );
         speackQr(
-            '¡Bienvenido, ${isPerson.nombre}! Tu asistencia ha sido registrada. Como ${isPerson.rol}');
+          'Dorsal Numero:${isPerson.dorsal}.   \nNombre: ${isPerson.nombre + isPerson.apellidos}.',
+        );
         //SIQREXISTE guardamos en la Base de datos
         final listSql =
-            Provider.of<DBAsistenciaAppProvider>(context, listen: false)
-                .listsql;
+            Provider.of<DBCheckP00AppProvider>(context, listen: false).listsql;
         final listServer =
-            Provider.of<TAsistenciaProvider>(context, listen: false)
+            Provider.of<TCheckP00Provider>(context, listen: false)
                 .listAsistencia;
         final isOffline =
             Provider.of<UsuarioProvider>(context, listen: false).isOffline;
         // Verificamos si el usuario ya tiene una asistencia registrada para hoy
-        TAsistenciaModel? asistenciaPersonal;
+        TCheckPointsModel? asistenciaPersonal;
         try {
           asistenciaPersonal = isOffline
               ? listSql.firstWhere(
                   (e) {
-                    print('List SQl : ${e.nombrePersonal}');
-                    return e.nombrePersonal == isPerson.nombre &&
-                        e.horaEntrada.day == DateTime.now().day;
+                    print('List SQl : ${e.nombre}');
+                    return e.nombre == isPerson.nombre &&
+                        e.fecha.day == DateTime.now().day;
                   },
                 )
               : listServer.firstWhere(
                   (e) {
-                    print('List SERVER : ${e.nombrePersonal}');
-                    return e.nombrePersonal == isPerson.nombre &&
-                        e.horaEntrada.day == DateTime.now().day;
+                    print('List SERVER : ${e.nombre}');
+                    return e.nombre == isPerson.nombre &&
+                        e.fecha.day == DateTime.now().day;
                   },
                 );
           vibrate();
@@ -193,12 +205,17 @@ class _QrScannerPersonalState extends State<QrScannerPersonal> {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.error,
-          title: 'Usuario no encontrado',
-          text: 'No se encontró un usuario',
-          confirmBtnColor: Colors.red,
-          confirmBtnText: 'Cerrar',
-          cancelBtnText: '',
+          text: 'No se encontró corredor',
+          confirmBtnColor: Color(0xFFD3271A),
+          confirmBtnText: 'Ok',
+          width: 300,
+          onConfirmBtnTap: () {
+            _scanQRCode(); //SCANNER QR
+            particleinsta();
+            Navigator.pop(context);
+          },
         );
+        speackQr('No se encontró corredor',);
       }
     } catch (e) {
       print('Error $e');
@@ -224,68 +241,62 @@ class _QrScannerPersonalState extends State<QrScannerPersonal> {
 
   //SQLLITE
   Future<void> enviaroffline() async {
-    final user =
-        Provider.of<UsuarioProvider>(context, listen: false).usuarioEncontrado;
-    final TAsistenciaModel offlineData = TAsistenciaModel(
+    // final user =
+    //     Provider.of<UsuarioProvider>(context, listen: false).usuarioEncontrado;
+    final TCheckPointsModel offlineData = TCheckPointsModel(
       id: '',
       created: DateTime.now(),
       updated: DateTime.now(),
-      idEmpleados: user!.id!,
-      idTrabajo: widget.idTrabajo,
-      horaEntrada: DateTime.now(),
-      horaSalida: DateTime.now(),
-      nombrePersonal: isPerson.nombre,
-      actividadRol: isPerson.rol,
-      detalles: '',
+      idCorredor: isPerson.id!,
+      idCheckPoints: '',
+      fecha: DateTime.now(),
+      estado: true,
+      nombre: isPerson.nombre,
+      dorsal: isPerson.dorsal,
     );
-    await context.read<DBAsistenciaAppProvider>().insertData(offlineData, true);
+    await context.read<DBCheckP00AppProvider>().insertData(offlineData, true);
   }
 
   Future<void> editarffline() async {
-    final TAsistenciaModel offlineData = TAsistenciaModel(
+    final TCheckPointsModel offlineData = TCheckPointsModel(
       id: personScaner.id,
       created: personScaner.created,
       updated: DateTime.now(),
-      idEmpleados: personScaner.idEmpleados,
-      idTrabajo: personScaner.idTrabajo,
-      horaEntrada: personScaner.horaEntrada,
-      horaSalida: DateTime.now(),
-      nombrePersonal: personScaner.nombrePersonal,
-      actividadRol: personScaner.actividadRol,
-      detalles: personScaner.detalles,
+      idCorredor: isPerson.id!,
+      idCheckPoints: '',
+      fecha: DateTime.now(),
+      estado: true,
+      nombre: isPerson.nombre,
+      dorsal: isPerson.dorsal,
     );
     print('EDIT DATA : offlinee ${personScaner.id}');
     await context
-        .read<DBAsistenciaAppProvider>()
+        .read<DBCheckP00AppProvider>()
         .updateData(offlineData, personScaner.idsql!, true);
   }
 
 //SERVER
   Future<void> editarEntrada() async {
-    await context.read<TAsistenciaProvider>().updateTAsistenciaProvider(
+    await context.read<TCheckP00Provider>().updateTAsistenciaProvider(
           id: personScaner.id,
-          idEmpleados: personScaner.idEmpleados,
-          idTrabajo: personScaner.idTrabajo,
-          horaEntrada: personScaner.horaEntrada,
-          horaSalida: DateTime.now(),
-          nombrePersonal: personScaner.nombrePersonal,
-          actividadRol: personScaner.actividadRol,
-          detalles: personScaner.detalles,
+          idCorredor: isPerson.id!,
+          idCheckPoints: '',
+          fecha: DateTime.now(),
+          estado: true,
+          nombre: isPerson.nombre,
+          dorsal: isPerson.dorsal,
         );
   }
 
   Future<void> guardarEntrada() async {
-    final user =
-        Provider.of<UsuarioProvider>(context, listen: false).usuarioEncontrado;
-    await context.read<TAsistenciaProvider>().postTAsistenciaProvider(
+    await context.read<TCheckP00Provider>().postTAsistenciaProvider(
           id: '',
-          idEmpleados: user!.id,
-          idTrabajo: widget.idTrabajo,
-          horaEntrada: DateTime.now(),
-          horaSalida: DateTime.now(),
-          nombrePersonal: isPerson.nombre,
-          actividadRol: isPerson.rol,
-          detalles: '',
+          idCorredor: isPerson.id!,
+          idCheckPoints: '',
+          fecha: DateTime.now(),
+          estado: true,
+          nombre: isPerson.nombre,
+          dorsal: isPerson.dorsal,
         );
   }
 }
